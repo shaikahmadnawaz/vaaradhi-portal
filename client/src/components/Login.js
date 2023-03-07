@@ -3,12 +3,15 @@ import LoginImg from "../assets/login.svg";
 
 const Login = () => {
   return (
-    <div className="container w-screen h-screen grid grid-cols-2 gap-[7rem] py-[2rem]">
-      <div className="img flex justify-end items-center">
+    <div className="container w-screen h-screen flex items-center justify-center gap-[7rem] py-[2rem]">
+      <div className="img w-1/2 flex justify-end items-center">
         <img className="w-[500px]" src={LoginImg} alt="" />
       </div>
-      <div className="login-content flex justify-start items-center text-center">
-        <form className="w-[360px]" action="">
+      <div className="login-content w-1/2 flex justify-start items-center text-center">
+        <form
+          className="flex flex-col items-center justify-center h-[500px] w-[600px] shadow-lg p-7"
+          action=""
+        >
           <h2 className="title my-[15px] text-blueTheme uppercase text-5xl font-bold">
             Welcome
           </h2>
@@ -68,7 +71,7 @@ const Login = () => {
           </div>
           <input
             type="submit"
-            className="btn block w-full h-12 rounded-lg uppercase my-4 cursor-pointer bg-blueTheme text-white hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
+            className="btn block w-[400px] h-12 rounded-lg uppercase my-4 cursor-pointer bg-blueTheme text-white hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
             value="Login"
           />
         </form>
