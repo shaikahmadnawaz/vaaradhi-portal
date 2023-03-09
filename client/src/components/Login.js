@@ -5,7 +5,7 @@ const Login = () => {
   return (
     <div className="container w-screen h-screen flex items-center justify-center gap-[7rem] py-[2rem]">
       <div className="img w-1/2 flex justify-end items-center">
-        <img className="w-[500px]" src={LoginImg} alt="" />
+        <img className="w-[500px]" src={LoginImg} alt="logo" />
       </div>
       <div className="login-content w-1/2 flex justify-start items-center text-center">
         <form
