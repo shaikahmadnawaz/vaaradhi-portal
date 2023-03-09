@@ -13,7 +13,7 @@ const Student = () => {
         <div className="w-32 h-32">
           <img
             src={student.image}
-            alt="Card Image"
+            alt="card img"
             className="w-full mb-4 rounded-full"
           />
         </div>
