@@ -12,10 +12,10 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api/v1", admin);
-app.use("/api/v1", student);
-app.use("/api/v1", donor);
-app.use("/api/v1", careTaker);
+app.use("/api/admin", admin);
+app.use("/api/student", student);
+app.use("/api/donor", donor);
+app.use("/api/caretaker", careTaker);
 
 const port = process.env.PORT || 5000;
 const start = async () => {

@@ -1,6 +1,11 @@
 //Creating a token and saving it in a cookie
 const sendToken = (user, statusCode, res) => {
-  const token = user.getJWTToken();
+  function getJWTToken () {
+    return jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: process.env.JWT_EXPIRE,
+    });
+  }
+  const token = getJWTToken();
   //cookie options
   const options = {
     httpOnly: true,
