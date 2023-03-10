@@ -2,20 +2,15 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./db/connectDB.js";
 import cookieParser from "cookie-parser";
-import donor from "./routes/donorRoute.js";
-import careTaker from "./routes/careTakerRoute.js";
-import student from "./routes/studentRoute.js";
 import admin from "./routes/adminRoute.js";
 
-dotenv.config();
+dotenv.config({path:'./config/.env'});
+
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/admin", admin);
-app.use("/api/student", student);
-app.use("/api/donor", donor);
-app.use("/api/caretaker", careTaker);
 
 const port = process.env.PORT || 5000;
 const start = async () => {

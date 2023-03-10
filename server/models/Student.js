@@ -13,10 +13,9 @@ const studentSchema = new mongoose.Schema({
       message: "Not a valid URL",
     },
   },
-  aadharNumber:{
+  aadhar:{
     type: Number,
-    required:"Aadhar Number can't be empty",
-    minlength:12,
+    required:"Aaadhar Number must be 12 digits",
     maxlength:12,
   },
   dateOfBirth: {

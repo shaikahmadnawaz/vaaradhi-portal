@@ -1,10 +1,10 @@
 // TO-DO: User authentication
-import ErrorHandler from "../utils/errorhandler";
+import ErrorHandler from "../utils/errorhandler.js";
 import jwt from "jsonwebtoken";
-import Admin from "../models/Admin";
-import catchAsyncErrors from "../middleware/catchSyncErrors";
+import Admin from "../models/Admin.js";
+import catchAsyncErrors from "../middleware/catchSyncErrors.js";
 
-exports.isAuthenticated = catchAsyncErrors(async (req, res, next) => {
+const isAuthenticated = catchAsyncErrors(async (req, res, next) => {
     const { token } = req.cookies;
     if (!token) {
       return next(new ErrorHandler("Please login to access this resource ", 401));
@@ -27,3 +27,5 @@ exports.isAuthenticated = catchAsyncErrors(async (req, res, next) => {
 //     next();
 //   };
 // };
+
+export default isAuthenticated

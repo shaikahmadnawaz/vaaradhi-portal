@@ -8,10 +8,10 @@ import sendEmail from "../utils/sendEmail.js";
 import catchAsyncErrors from "../middleware/catchSyncErrors.js";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
-import { send } from "process";
+
 
 //Registering Donor
-exports.addDonor = catchAsyncErrors(async (req, res, next) => {
+export const addDonor = catchAsyncErrors(async (req, res, next) => {
   const { name, image, dateOfBirth, email, password, mobile, occupation, students, transactions} = req.body;
 
   if (!name || !image || !dateOfBirth || !email || !password || !mobile || !occupation) {
@@ -31,25 +31,25 @@ exports.addDonor = catchAsyncErrors(async (req, res, next) => {
 });
 
 // Registering Student
-exports.addStudent = catchAsyncErrors(async (req, res, next) => {
-  const { name, image, dateOfBirth, gender, mother, father, guardian, careTaker, donor, category, education, previousCaretakers, previousDonors, documents, activities} = req.body;
+export const addStudent = catchAsyncErrors(async (req, res, next) => {
+  const { name, image,aadhar, dateOfBirth, gender, mother, father, guardian, careTaker, donor, category, education, previousCaretakers, previousDonors, documents, activities} = req.body;
     
-  if (!name || !image || !dateOfBirth || !gender || !careTaker || !donor || !category || !education) {
+  if (!name || !image || !aadhar || !dateOfBirth || !gender || !mother || !father || !category || !education) {
     return next(new ErrorHandler("Please fill all details ", 400));
   }
-  const isUser = await Student.findOne({ email: email });
+  const isUser = await Student.findOne({ aadhar: aadhar });
   if (isUser) {
-    return next(new ErrorHandler("Email already exists", 400));
+    return next(new ErrorHandler("Student already exists", 400));
   }
   const student = await new Student({
-    name,image:"sample-url",dateOfBirth,gender,mother,father,guardian,careTaker,donor,category,education,previousCaretakers,previousDonors,documents,activities,
+    name,image,dateOfBirth,gender,mother,father,guardian,careTaker,donor,category,education,previousCaretakers,previousDonors,documents,activities
   });
   await student.save();
   sendToken(student, 201, res);
 });
 
 // Registering CareTaker
-exports.addCaretaker = catchAsyncErrors(async (req, res, next) => {
+export const addCaretaker = catchAsyncErrors(async (req, res, next) => {
   const { name, image, dateOfBirth, email, password, mobile, students } = req.body;
 
   if (!name || !image || !dateOfBirth || !mobile || !email || !password) {
@@ -69,7 +69,7 @@ exports.addCaretaker = catchAsyncErrors(async (req, res, next) => {
 
 
 //Login Admin
-const AdminLogin = catchAsyncErrors(async (req, res, next) => {
+export const AdminLogin = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
   //Verifying  all fields are filled or not
   if (!email || !password) {
@@ -87,7 +87,7 @@ const AdminLogin = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Logout Admin
-exports.AdminLogout = catchAsyncErrors(async (req, res, next) => {
+export const AdminLogout = catchAsyncErrors(async (req, res, next) => {
   res.cookie("token", null, {
     expires: new Date(Date.now()),
     httpOnly: true,
@@ -99,7 +99,7 @@ exports.AdminLogout = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Forgot Password
-exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
+export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   const admin = await Admin.findOne({ email: req.body.email });
   if (!admin) {
     return next(new ErrorHandler("User not Found", 404));
@@ -131,7 +131,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Reset Password
-exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
+export const resetPassword = catchAsyncErrors(async (req, res, next) => {
   //creating hashed token
   const resetPasswordToken = crypto
     .createHash("sha256")
@@ -155,7 +155,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Get Student Details
-// exports.getStudentDetails = catchAsyncErrors(async (req, res, next) => {
+// export const getStudentDetails = catchAsyncErrors(async (req, res, next) => {
 //   const student = await Student.findById(req.student.id);
 //   res.status(200).json({
 //     sucess: true,
@@ -164,7 +164,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 // });
 
 //Get Donor Details
-// exports.getDonorDetails = catchAsyncErrors(async (req, res, next) => {
+// export const getDonorDetails = catchAsyncErrors(async (req, res, next) => {
 //   const donor = await Donor.findById(req.donor.id);
 //   res.status(200).json({
 //     sucess: true,
@@ -173,7 +173,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 // });
 
 //Get Caretaker Details
-// exports.getUserDetails = catchAsyncErrors(async (req, res, next) => {
+// export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
 //   const caretaker = await Caretaker.findById(req.caretaker.id);
 //   res.status(200).json({
 //     sucess: true,
@@ -183,7 +183,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 
 
 //Update Admin Password
-exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
+export const updatePassword = catchAsyncErrors(async (req, res, next) => {
   const { oldPassword, newPassword, confirmPassword } = req.body;
   if (!oldPassword || !newPassword || !confirmPassword) {
     return next(new ErrorHandler("Please fill all the details ", 400));
@@ -207,7 +207,7 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Update Student Profile
-exports.updateStudentProfile = catchAsyncErrors(async (req, res, next) => {
+export const updateStudentProfile = catchAsyncErrors(async (req, res, next) => {
   const student = await Student.findById(req.params.id);
   if (!student) {
     return next(new ErrorHandler(`student does not exist with id : ${req.student.id}`, 404));
@@ -234,7 +234,7 @@ exports.updateStudentProfile = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Update Admin Profile
-exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
+export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   const admin = await Admin.findById(req.params.id);
   if (!admin) {
     return next(new ErrorHandler(`admin does not exist with id : ${req.admin.id}`, 404));
@@ -261,7 +261,7 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Update Donor Profile
-exports.updateDonorProfile = catchAsyncErrors(async (req, res, next) => {
+export const updateDonorProfile = catchAsyncErrors(async (req, res, next) => {
   const donor = await Donor.findById(req.params.id);
   if (!donor) {
     return next(new ErrorHandler(`donor does not exist with id : ${req.donor.id}`, 404));
@@ -288,7 +288,7 @@ exports.updateDonorProfile = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Update CareTaker Profile
-exports.updateCareTakerProfile = catchAsyncErrors(async (req, res, next) => {
+export const updateCareTakerProfile = catchAsyncErrors(async (req, res, next) => {
   const caretaker = await Caretaker.findById(req.params.id);
   if (!caretaker) {
     return next(new ErrorHandler(`caretaker does not exist with id : ${req.caretaker.id}`, 404));
@@ -315,7 +315,7 @@ exports.updateCareTakerProfile = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Get All Donors
-exports.getAllDonors = catchAsyncErrors(async (req, res, next) => {
+export const getAllDonors = catchAsyncErrors(async (req, res, next) => {
   const donors = await Donor.find();
   res.status(200).json({
     success: true,
@@ -324,7 +324,7 @@ exports.getAllDonors = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Get All Students
-exports.getAllStudents = catchAsyncErrors(async (req, res, next) => {
+export const getAllStudents = catchAsyncErrors(async (req, res, next) => {
   const students = await Student.find();
   res.status(200).json({
     success: true,
@@ -333,7 +333,7 @@ exports.getAllStudents = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Get All CareTakers
-exports.getAllCareTakers = catchAsyncErrors(async (req, res, next) => {
+export const getAllCareTakers = catchAsyncErrors(async (req, res, next) => {
   const caretakers = await Caretaker.find();
   res.status(200).json({
     success: true,
@@ -342,7 +342,7 @@ exports.getAllCareTakers = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Get Single Student
-exports.getStudentDetails = catchAsyncErrors(async (req, res, next) => {
+export const getStudentDetails = catchAsyncErrors(async (req, res, next) => {
   const student = await Student.findById(req.params.id);
   if (!student) {
     return next(new ErrorHandler(`student does not exist with id : ${req.params.id}`, 404));
@@ -354,7 +354,7 @@ exports.getStudentDetails = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Get Single Donor
-exports.getDonorDetails = catchAsyncErrors(async (req, res, next) => {
+export const getDonorDetails = catchAsyncErrors(async (req, res, next) => {
   const donor = await Donor.findById(req.params.id);
   if (!donor) {
     return next(new ErrorHandler(`donor does not exist with id : ${req.params.id}`, 404));
@@ -366,7 +366,7 @@ exports.getDonorDetails = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Get Single CareTaker
-exports.getCareTakerDetails = catchAsyncErrors(async (req, res, next) => {
+export const getCareTakerDetails = catchAsyncErrors(async (req, res, next) => {
   const caretaker = await Caretaker.findById(req.params.id);
   if (!caretaker) {
     return next(new ErrorHandler(`caretaker does not exist with id : ${req.params.id}`, 404));
@@ -379,7 +379,7 @@ exports.getCareTakerDetails = catchAsyncErrors(async (req, res, next) => {
 
 
 //Remove Donor
-exports.removeDonor = catchAsyncErrors(async (req, res, next) => {
+export const removeDonor = catchAsyncErrors(async (req, res, next) => {
   const donor = await Donor.findById(req.params.id);
   if (!donor) {
     return next(new ErrorHandler(`donor does not exist with id : ${req.params.id}`, 404));
@@ -392,7 +392,7 @@ exports.removeDonor = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Remove Student
-exports.removeStudent = catchAsyncErrors(async (req, res, next) => {
+export const removeStudent = catchAsyncErrors(async (req, res, next) => {
   const student = await Student.findById(req.params.id);
   if (!student) {
     return next(new ErrorHandler(`student does not exist with id : ${req.params.id}`, 404));
@@ -405,7 +405,7 @@ exports.removeStudent = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Remove CareTaker
-exports.removeCareTaker = catchAsyncErrors(async (req, res, next) => {
+export const removeCareTaker = catchAsyncErrors(async (req, res, next) => {
   const caretaker = await Caretaker.findById(req.params.id);
   if (!caretaker) {
     return next(new ErrorHandler(`caretaker does not exist with id : ${req.params.id}`, 404));

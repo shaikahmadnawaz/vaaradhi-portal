@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import validator from "validator";
 
 const adminSchema = new mongoose.Schema({
   name: {
