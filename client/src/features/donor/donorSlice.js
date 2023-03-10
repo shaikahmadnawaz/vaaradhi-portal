@@ -11,20 +11,12 @@ const initialState = {
   occupation: "",
   students: students,
   transactions: [],
-  currentStudentId: -1,
 };
 
 const donorSlice = createSlice({
   name: "donor",
   initialState,
-  reducers: {
-    setCurrentStudent: (state, action) => {
-      console.log(action.payload.id);
-      state.currentStudentId = action.payload.id;
-    },
-  },
+  reducers: {},
 });
-
-export const { setCurrentStudent } = donorSlice.actions;
 
 export default donorSlice.reducer;

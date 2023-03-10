@@ -1,15 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setCurrentStudent } from "../../features/donor/donorSlice";
 
 const AllStudents = () => {
   const { students } = useSelector((store) => store.donor);
-  const dispatch = useDispatch();
   return (
-    <section className="min-h-screen bg-slate-300 flex flex-col items-center">
-      <h1 className="pt-20 font-medium text-2xl">Students</h1>
+    <section className="min-h-screen bg-gradient-to-t from-blue-400  to-red-400 flex flex-col items-center">
+      <h1 className="pt-20 font-medium text-4xl">Students</h1>
       <div className="student-container grid grid-cols-3 justify-self-center gap-8 h-4/5 justify-center rounded-md py-20 w-4/5 m-auto ">
         {students.map((student) => {
           return (
@@ -28,11 +25,8 @@ const AllStudents = () => {
               <p>{student.gender}</p>
               <p>{student.mobile}</p>
               <Link
-                to="/student"
-                onClick={() => {
-                  console.log(student.id);
-                  dispatch(setCurrentStudent({ id: student.id }));
-                }}
+                to={`/donor/students/${student.id}`}
+                className="bg-blue-500 text-white p-2 rounded-lg"
               >
                 More details
               </Link>

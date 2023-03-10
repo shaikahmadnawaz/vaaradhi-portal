@@ -1,21 +1,26 @@
 import React from "react";
 import Login from "./components/Login";
-import AllStudents from "./pages/donor/AllStudents";
-import Student from "./pages/donor/Student";
+import { Welcome as AdminWelcome, CreateStudent } from "./pages/admin";
+import { Welcome as DonorWelcome, AllStudents, Student } from "./pages/donor";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import CreateStudent from "./components/CreateStudent";
 
 function App() {
   return (
     <>
-      <CreateStudent />
-      {/* <BrowserRouter>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/students" element={<AllStudents />} />
-          <Route path="/student" element={<Student />} />
+          <Route path="/admin/">
+            <Route index element={<AdminWelcome />} />
+            <Route path="createstudent" element={<CreateStudent />} />
+          </Route>
+          <Route path="/donor/">
+            <Route index element={<DonorWelcome />} />
+            <Route path="students" element={<AllStudents />} />
+            <Route path="students/:id" element={<Student />} />
+          </Route>
         </Routes>
-      </BrowserRouter> */}
+      </BrowserRouter>
     </>
   );
 }
