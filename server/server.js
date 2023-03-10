@@ -2,10 +2,10 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./db/connectDB.js";
 import cookieParser from "cookie-parser";
-import donor from "./routes/donorRoute";
-import careTaker from "./routes/careTakerRoute";
-import student from "./routes/studentRoute";
-import admin from "./routes/adminRoute";
+import donor from "./routes/donorRoute.js";
+import careTaker from "./routes/careTakerRoute.js";
+import student from "./routes/studentRoute.js";
+import admin from "./routes/adminRoute.js";
 
 dotenv.config();
 const app = express();

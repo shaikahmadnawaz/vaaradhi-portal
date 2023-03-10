@@ -1,13 +1,13 @@
-import ErrorHandler from "../utils/errorhandler";
-import Donor from "../models/Donor";
-import Admin from "../models/Admin";
-import Caretaker from "../models/Caretaker";
-import Student from "../models/Student";
-import sendToken from "../utils/jwttoken";
-import sendEmail from "../utils/sendEmail";
-import catchAsyncErrors from "../middleware/catchSyncErrors";
+import ErrorHandler from "../utils/errorhandler.js";
+import Donor from "../models/Donor.js";
+import Admin from "../models/Admin.js";
+import Caretaker from "../models/Caretaker.js";
+import Student from "../models/Student.js";
+import sendToken from "../utils/jwttoken.js";
+import sendEmail from "../utils/sendEmail.js";
+import catchAsyncErrors from "../middleware/catchSyncErrors.js";
 import crypto from "crypto";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import { send } from "process";
 
 //Registering Donor
@@ -69,7 +69,7 @@ exports.addCaretaker = catchAsyncErrors(async (req, res, next) => {
 
 
 //Login Admin
-exports.AdminLogin = catchAsyncErrors(async (req, res, next) => {
+const AdminLogin = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
   //Verifying  all fields are filled or not
   if (!email || !password) {

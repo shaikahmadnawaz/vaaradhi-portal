@@ -1,29 +1,29 @@
 import express from "express";
 const router = express.Router();
-import {
-  addStudent,
-  addDonor,
-  addCaretaker,
-  AdminLogin,
-  forgotPassword,
-  resetPassword,
-  AdminLogout,
-  updatePassword,
-  updateProfile,
-  getAllDonors,
-  getAllStudents,
-  getAllCareTakers,
-  getDonorDetails,
-  getStudentDetails,
-  getCareTakerDetails,
-  updateStudentProfile,
-  updateDonorProfile,
-  updateCareTakerProfile,
-  removeDonor,
-  removeStudent,
-  removeCareTaker,
-} from "../controllers/adminControllers";
-
+// import 
+//   addStudent,
+//   addDonor,
+//   addCaretaker,
+//   AdminLogin,
+//   forgotPassword,
+//   resetPassword,
+//   AdminLogout,
+//   updatePassword,
+//   updateProfile,
+//   getAllDonors,
+//   getAllStudents,
+//   getAllCareTakers,
+//   getDonorDetails,
+//   getStudentDetails,
+//   getCareTakerDetails,
+//   updateStudentProfile,
+//   updateDonorProfile,
+//   updateCareTakerProfile,
+//   removeDonor,
+//   removeStudent,
+//   removeCareTaker,
+//  from "../controllers/adminControllers.js";
+import {AdminLogin} from "../controllers/adminControllers.js";
 //import { isAuthenticated, authorizeRoles }  from "../middleware/auth";
 
 router.route("/students/new").post(addStudent);
