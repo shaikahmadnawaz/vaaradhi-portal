@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { ErrorHandler, sendEmail } from "../utils/index.js";
 import { Donor, Admin, Caretaker, Student } from "../models/index.js";
 import catchAsyncErrors from "../middleware/catchSyncErrors.js";
+import asyncHandler from "express-async-handler";
 // import bcrypt from "bcrypt";
 // import { send } from "process";
 // import sendToken from "../utils/jwttoken";
