@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import connectDB from "./db/connectDB.js";
 import { adminRouter } from "./routes/index.js";
 import Admin from "./models/Admin.js";
-
+dotenv.config();
 const app = express();
 app.use(express.json());
 
@@ -29,7 +29,7 @@ const start = async () => {
 //     const admin = await Admin.create({
 //       name: "admin",
 //       image: "https://picsum.photos/200",
-//       email: "admin@gmail.com",
+//       email: "admin@gmail.com", 
 //       password: "secret",
 //       mobile: "9123456780",
 //     });

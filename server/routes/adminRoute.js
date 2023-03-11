@@ -69,19 +69,19 @@ router.route("/caretakers/all").get(
 router.route("/donor/:id").get(
   isAuthenticated,
   // authorizeRoles("admin"),
-  getDonorDetails
+  //getDonorDetails
 );
 
 router.route("/student/:id").get(
   isAuthenticated,
   // authorizeRoles("admin"),
-  getStudentDetails
+  //getStudentDetails
 );
 
 router.route("/caretaker/:id").get(
   isAuthenticated,
   // authorizeRoles("admin"),
-  getCareTakerDetails
+  //getCareTakerDetails
 );
 
 router.route("/student/update/:id").put(
@@ -120,4 +120,4 @@ router.route("/caretaker/delete/:id").delete(
   removeCareTaker
 );
 
-module.exports = router;
+export default router;

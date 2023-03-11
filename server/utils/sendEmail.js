@@ -1,8 +1,4 @@
 import nodeMailer from "nodemailer";
-<<<<<<< HEAD
-
-=======
->>>>>>> 57aaaa0f72c8200eebda9791c5ce785c6d64e485
 const sendEmail = async (options) => {
   const transporter = nodeMailer.createTransport({
     service: process.env.SMTP_SERVICE,
