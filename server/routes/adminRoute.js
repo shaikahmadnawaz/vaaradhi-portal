@@ -60,9 +60,64 @@ router.route("/student/update/:id").put(isAuthenticated, updateStudent);
 router.route("/donor/update/:id").put(isAuthenticated, updateDonor);
 router.route("/caretaker/update/:id").put(isAuthenticated, updateCareTaker);
 
-// remove
-router.route("/donor/delete/:id").delete(isAuthenticated, removeDonor);
-router.route("/student/delete/:id").delete(isAuthenticated, removeStudent);
-router.route("/caretaker/delete/:id").delete(isAuthenticated, removeCareTaker);
+router.route("/caretakers/all").get(
+  isAuthenticated,
+  // authorizeRoles("admin"),
+  getAllCareTakers
+);
 
-export default router;
+router.route("/donor/:id").get(
+  isAuthenticated,
+  // authorizeRoles("admin"),
+  getDonorDetails
+);
+
+router.route("/student/:id").get(
+  isAuthenticated,
+  // authorizeRoles("admin"),
+  getStudentDetails
+);
+
+router.route("/caretaker/:id").get(
+  isAuthenticated,
+  // authorizeRoles("admin"),
+  getCareTakerDetails
+);
+
+router.route("/student/update/:id").put(
+  isAuthenticated,
+  // authorizeRoles("admin"),
+  updateStudentProfile
+);
+
+router.route("/donor/update/:id").put(
+  isAuthenticated,
+  // authorizeRoles("admin"),
+  updateDonorProfile
+);
+
+router.route("/caretaker/update/:id").put(
+  isAuthenticated,
+  // authorizeRoles("admin"),
+  updateCareTakerProfile
+);
+
+router.route("/donor/delete/:id").delete(
+  isAuthenticated,
+  // authorizeRoles("admin"),
+  removeDonor
+);
+
+router.route("/student/delete/:id").delete(
+  isAuthenticated,
+  // authorizeRoles("admin"),
+  removeStudent
+);
+
+router.route("/caretaker/delete/:id").delete(
+  isAuthenticated,
+  // authorizeRoles("admin"),
+  removeCareTaker
+);
+
+module.exports = router;

@@ -85,7 +85,7 @@ export const addStudent = catchAsyncErrors(async (req, res, next) => {
       new ErrorHandler("Please fill all details ", StatusCodes.BAD_REQUEST)
     );
   }
-  const isUser = await Student.findOne({ email: email });
+  const isUser = await Student.findOne({ aadhar: aadhar });
   if (isUser) {
     return next(
       new ErrorHandler("Email already exists", StatusCodes.BAD_REQUEST)
@@ -539,6 +539,7 @@ export const removeDonor = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Remove Student
+
 export const removeStudent = catchAsyncErrors(async (req, res, next) => {
   const student = await Student.findById(req.params.id);
   if (!student) {

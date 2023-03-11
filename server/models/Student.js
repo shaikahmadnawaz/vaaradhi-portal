@@ -20,7 +20,7 @@ const studentSchema = new mongoose.Schema({
     default: "yes",
     required: "active status can't be empty",
   },
-  aadharNumber: {
+  aadhar: {
     type: Number,
     required: "Aadhar Number can't be empty",
     minlength: 12,

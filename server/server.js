@@ -4,7 +4,6 @@ import connectDB from "./db/connectDB.js";
 import { adminRouter } from "./routes/index.js";
 import Admin from "./models/Admin.js";
 
-dotenv.config();
 const app = express();
 app.use(express.json());
 

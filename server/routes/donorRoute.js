@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import express from "express";
 // const router = express.Router();
 // import {
@@ -29,3 +30,5 @@
 //   .delete(isAuthenticated, authorizeRoles("admin"), deleteOrder);
 
 // // module.exports = router;
+=======
+>>>>>>> 57aaaa0f72c8200eebda9791c5ce785c6d64e485
