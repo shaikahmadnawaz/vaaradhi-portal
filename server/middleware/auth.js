@@ -1,18 +1,35 @@
 // TO-DO: User authentication
-import ErrorHandler from "../utils/errorhandler";
 import jwt from "jsonwebtoken";
-import Admin from "../models/Admin";
-import catchAsyncErrors from "../middleware/catchSyncErrors";
+import { StatusCodes } from "http-status-codes";
+import ErrorHandler from "../utils/errorhandler.js";
+import catchAsyncErrors from "../middleware/catchSyncErrors.js";
 
-exports.isAuthenticated = catchAsyncErrors(async (req, res, next) => {
-    const { token } = req.cookies;
-    if (!token) {
-      return next(new ErrorHandler("Please login to access this resource ", 401));
-    }
-    const decodedData = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    req.admin = await Admin.findById(decodedData.id);
+export const isAuthenticated = catchAsyncErrors(async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return next(
+      new ErrorHandler("Please fill all details...", StatusCodes.BAD_REQUEST)
+    );
+  }
+  const token = authHeader.split(" ")[1];
+  if (!token) {
+    return next(
+      new ErrorHandler(
+        "Please login to access this resource ",
+        StatusCodes.BAD_REQUEST
+      )
+    );
+  }
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = payload.userId;
     next();
+  } catch (error) {
+    new ErrorHandler("Invalid access", StatusCodes.BAD_REQUEST);
+  }
 });
+
+export default isAuthenticated;
 
 // exports.authorizeRoles = (...roles) => {
 //   return (req, res, next) => {
