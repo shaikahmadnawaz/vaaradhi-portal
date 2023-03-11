@@ -2,61 +2,61 @@ import crypto from "crypto";
 import { StatusCodes } from "http-status-codes";
 import { ErrorHandler, sendEmail } from "../utils/index.js";
 import { Donor, Admin, Caretaker, Student } from "../models/index.js";
-import catchAsyncErrors from "../middleware/catchSyncErrors.js";
 import asyncHandler from "express-async-handler";
-// import bcrypt from "bcrypt";
-// import { send } from "process";
-// import sendToken from "../utils/jwttoken";
 
 //Registering Donor
-export const addDonor = catchAsyncErrors(async (req, res, next) => {
-  const {
-    name,
-    image,
-    dateOfBirth,
-    email,
-    password,
-    mobile,
-    occupation,
-    students,
-    transactions,
-  } = req.body;
+export const addDonor = asyncHandler(async(req, res, next) => {
 
-  if (
-    !name ||
-    !image ||
-    !dateOfBirth ||
-    !email ||
-    !password ||
-    !mobile ||
-    !occupation
-  ) {
-    return next(
-      new ErrorHandler("Please fill all details...", StatusCodes.BAD_REQUEST)
-    );
+  const { name, image, dateOfBirth, email, password, mobile, occupation} = req.body;
+  //checking if any of the required details are not received 
+  if ( !name || !image || !dateOfBirth || !email || !password || !mobile ) {
+    res.status(StatusCodes.BAD_REQUEST);
+    throw new Error("Fill all the details !");
   }
+
+  //checking whether the donor is previously registered or not (same email)
   const isDonor = await Donor.findOne({ email });
-  if (isDonor) {
-    return next(
-      new ErrorHandler("Email already exists", StatusCodes.BAD_REQUEST)
-    );
+  
+  //if the donor already exists returning error message
+  if(isDonor) {
+    res.status(StatusCodes.CONFLICT);
+    throw new Error("Donor Already Exists !")
   }
-  const donor = await Donor.create({
-    name,
-    image,
-    dateOfBirth,
-    email,
-    password,
-    mobile,
-    occupation,
-    students,
-    transactions,
-  });
-  res.status(StatusCodes.CREATED).json({ donor, msg: "Donor created" });
+
+  //else creating the donor
+  const donor = await Donor.create(req.body);
+
+  //returning the details of the donor along with a success message
+  const donorData = await Donor.findOne({_id:donor._id}).select('-password');
+  return res.status(StatusCodes.CREATED).json({ donorData, msg: "Donor created" });
 });
 
+
+
+// Registering CareTaker
+export const addCaretaker = asyncHandler(async (req, res, next) => {
+
+  const {name, image, dateOfBirth, email, password, mobile} = req.body;
+
+  if (!name || !image || !dateOfBirth || !mobile || !email || !password) {
+    throw new Error('Fill all the required details');
+  }
+
+  const isCaretaker = await Caretaker.findOne({ email });
+  if (isCaretaker) {
+    res.status(StatusCodes.CONFLICT);
+    throw new Error('Caretaker already exists');
+  }
+
+  const caretaker = await Caretaker.create(req.body);
+  const caretakerData = await Caretaker.findOne({_id:caretaker._id}).select('-password');
+  res.status(StatusCodes.CREATED).json({ caretakerData, msg: "Caretaker created" });
+});
+
+
+
 // Registering Student
-export const addStudent = catchAsyncErrors(async (req, res, next) => {
+export const addStudent = asyncHandler(async (req, res, next) => {
   const {
     name,
     image,
@@ -111,37 +111,10 @@ export const addStudent = catchAsyncErrors(async (req, res, next) => {
   // sendToken(student, 201, res);
 });
 
-// Registering CareTaker
-export const addCaretaker = catchAsyncErrors(async (req, res, next) => {
-  const { name, image, dateOfBirth, email, password, mobile, students } =
-    req.body;
-  if (!name || !image || !dateOfBirth || !mobile || !email || !password) {
-    return next(
-      new ErrorHandler("Please fill all details ", StatusCodes.BAD_REQUEST)
-    );
-  }
-  const isUser = await Caretaker.findOne({ email: email });
-  if (isUser) {
-    return next(
-      new ErrorHandler("Email already exists", StatusCodes.BAD_REQUEST)
-    );
-  }
-  const caretaker = await Caretaker.create({
-    name,
-    image,
-    dateOfBirth,
-    email,
-    password,
-    mobile,
-    students,
-  });
-  res
-    .status(StatusCodes.CREATED)
-    .json({ caretaker, msg: "Care taker created" });
-});
+
 
 //Login Admin
-export const login = catchAsyncErrors(async (req, res, next) => {
+export const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
   //Verifying  all fields are filled or not
   if (!email || !password) {
@@ -170,7 +143,7 @@ export const login = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Forgot Password
-export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
+export const forgotPassword = asyncHandler(async (req, res, next) => {
   const admin = await Admin.findOne({ email: req.body.email });
   if (!admin) {
     return next(new ErrorHandler("User not Found", StatusCodes.NOT_FOUND));
@@ -206,7 +179,7 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Reset Password
-export const resetPassword = catchAsyncErrors(async (req, res, next) => {
+export const resetPassword = asyncHandler(async (req, res, next) => {
   //creating hashed token
   const resetPasswordToken = crypto
     .createHash("sha256")
@@ -235,7 +208,7 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Update Admin Password
-export const updatePassword = catchAsyncErrors(async (req, res, next) => {
+export const updatePassword = asyncHandler(async (req, res, next) => {
   const { oldPassword, newPassword, confirmPassword } = req.body;
   if (!oldPassword || !newPassword || !confirmPassword) {
     return next(new ErrorHandler("Please fill all the details ", 400));
@@ -260,7 +233,7 @@ export const updatePassword = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Update Student Profile
-export const updateStudent = catchAsyncErrors(async (req, res, next) => {
+export const updateStudent = asyncHandler(async (req, res, next) => {
   // const student = await Student.findById(req.params.id);
   const student = await Student.findById(req.body.id);
   if (!student) {
@@ -309,16 +282,11 @@ export const updateStudent = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Update Admin Profile
-export const updateProfile = catchAsyncErrors(async (req, res, next) => {
+export const updateProfile = asyncHandler(async (req, res, next) => {
   // const admin = await Admin.findById(req.params.id);
   const admin = await Admin.findById(req.body.id).select("+password");
   if (!admin) {
-    return next(
-      new ErrorHandler(
-        `admin does not exist with id : ${req.admin.id}`,
-        StatusCodes.NOT_FOUND
-      )
-    );
+    return next(new Error("Admin not Found !"));
   }
   // else {
   //   const isOthersData = await Admin.findOne({ email: email });
@@ -354,42 +322,13 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Update Donor Profile
-export const updateDonor = catchAsyncErrors(async (req, res, next) => {
+export const updateDonor = asyncHandler(async (req, res, next) => {
   // const donor = await Donor.findById(req.params.id);
-  const donor = await Donor.findById(req.body.id);
+  const donor = await Donor.findById(req.params.id);
   if (!donor) {
-    return next(
-      new ErrorHandler(
-        `donor does not exist with id : ${req.donor.id}`,
-        StatusCodes.NOT_FOUND
-      )
-    );
+    return next(new Error("Admin not Found !"));
   }
-  // else {
-  //   const isOthersData = await donor.findOne({ email: email });
-  //   if (isOthersData) {
-  //     if (req.donor.email === req.body.email) {
-  //       //we will add cloud url later (for avatar)
-  //       const donor = await donor.findByIdAndUpdate(req.donor.id, req.body, {
-  //         new: true,
-  //         runValidators: true,
-  //         useFindAndModify: false,
-  //       });
-  //       res.status(200).json({
-  //         success: true,
-  //         message: "Profile Updated Successfully",
-  //       });
-  //     } else {
-  //       return next(
-  //         new ErrorHandler(
-  //           "Email is already in use,Please choose a different email",
-  //           400
-  //         )
-  //       );
-  //     }
-  //   }
-  // }
-  const updatedDonor = await Student.findByIdAndUpdate(req.body.id, req.body, {
+  const updatedDonor = await Donor.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
     useFindAndModify: false,
@@ -398,47 +337,14 @@ export const updateDonor = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Update CareTaker Profile
-export const updateCareTaker = catchAsyncErrors(async (req, res, next) => {
+export const updateCareTaker = asyncHandler(async (req, res, next) => {
   // const caretaker = await Caretaker.findById(req.params.id);
-  const caretaker = await Caretaker.findById(req.body.id);
+  const caretaker = await Caretaker.findById(req.params.id);
   if (!caretaker) {
-    return next(
-      new ErrorHandler(
-        `caretaker does not exist with id : ${req.caretaker.id}`,
-        StatusCodes.NOT_FOUND
-      )
-    );
+    throw new Error("Caretaker doesnot exists !")
   }
-  // else {
-  //   const isOthersData = await Caretaker.findOne({ email: email });
-  //   if (isOthersData) {
-  //     if (req.caretaker.email === req.body.email) {
-  //       //we will add cloud url later (for avatar)
-  //       const caretaker = await caretaker.findByIdAndUpdate(
-  //         req.caretaker.id,
-  //         req.body,
-  //         {
-  //           new: true,
-  //           runValidators: true,
-  //           useFindAndModify: false,
-  //         }
-  //       );
-  //       res.status(200).json({
-  //         success: true,
-  //         message: "Profile Updated Successfully",
-  //       });
-  //     } else {
-  //       return next(
-  //         new ErrorHandler(
-  //           "Email is already in use,Please choose a different email",
-  //           400
-  //         )
-  //       );
-  //     }
-  //   }
-  // }
   const updatedCareTaker = await Caretaker.findByIdAndUpdate(
-    req.body.id,
+    req.params.id,
     req.body,
     {
       new: true,
@@ -450,7 +356,7 @@ export const updateCareTaker = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Get All Donors
-export const getAllDonors = catchAsyncErrors(async (req, res, next) => {
+export const getAllDonors = asyncHandler(async (req, res, next) => {
   const donors = await Donor.find();
   res.status(200).json({
     success: true,
@@ -459,7 +365,7 @@ export const getAllDonors = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Get All Students
-export const getAllStudents = catchAsyncErrors(async (req, res, next) => {
+export const getAllStudents = asyncHandler(async (req, res, next) => {
   const students = await Student.find();
   res.status(200).json({
     success: true,
@@ -468,7 +374,7 @@ export const getAllStudents = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Get All CareTakers
-export const getAllCareTakers = catchAsyncErrors(async (req, res, next) => {
+export const getAllCareTakers = asyncHandler(async (req, res, next) => {
   const caretakers = await Caretaker.find();
   res.status(200).json({
     success: true,
@@ -477,7 +383,7 @@ export const getAllCareTakers = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Get Single Student
-// exports.getStudentDetails = catchAsyncErrors(async (req, res, next) => {
+// exports.getStudentDetails = asyncHandler(async (req, res, next) => {
 //   const student = await Student.findById(req.params.id);
 //   if (!student) {
 //     return next(
@@ -491,7 +397,7 @@ export const getAllCareTakers = catchAsyncErrors(async (req, res, next) => {
 // });
 
 //Get Single Donor
-// exports.getDonorDetails = catchAsyncErrors(async (req, res, next) => {
+// exports.getDonorDetails = asyncHandler(async (req, res, next) => {
 //   const donor = await Donor.findById(req.params.id);
 //   if (!donor) {
 //     return next(
@@ -505,7 +411,7 @@ export const getAllCareTakers = catchAsyncErrors(async (req, res, next) => {
 // });
 
 //Get Single CareTaker
-// const getCareTakerDetails = catchAsyncErrors(async (req, res, next) => {
+// const getCareTakerDetails = asyncHandler(async (req, res, next) => {
 //   const caretaker = await Caretaker.findById(req.params.id);
 //   if (!caretaker) {
 //     return next(
@@ -522,7 +428,7 @@ export const getAllCareTakers = catchAsyncErrors(async (req, res, next) => {
 // });
 
 //Remove Donor
-export const removeDonor = catchAsyncErrors(async (req, res, next) => {
+export const removeDonor = asyncHandler(async (req, res, next) => {
   const donor = await Donor.findById(req.params.id);
   if (!donor) {
     return next(
@@ -541,7 +447,7 @@ export const removeDonor = catchAsyncErrors(async (req, res, next) => {
 
 //Remove Student
 
-export const removeStudent = catchAsyncErrors(async (req, res, next) => {
+export const removeStudent = asyncHandler(async (req, res, next) => {
   const student = await Student.findById(req.params.id);
   if (!student) {
     return next(
@@ -559,7 +465,7 @@ export const removeStudent = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Remove CareTaker
-export const removeCareTaker = catchAsyncErrors(async (req, res, next) => {
+export const removeCareTaker = asyncHandler(async (req, res, next) => {
   const caretaker = await Caretaker.findById(req.params.id);
   if (!caretaker) {
     return next(

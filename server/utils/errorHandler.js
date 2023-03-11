@@ -1,9 +1,11 @@
-class ErrorHandler extends Error {
-  constructor(message, statusCode) {
-    super(message);
-    this.statusCode = statusCode;
-    Error.captureStackTrace(this, this.constructor);
-  }
+const errorHandler = (err,req,res,next) =>{
+  const statuscode = res.statusCode ? res.statusCode : 500;
+  console.log("Error : ",err.message);
+  res.status(statuscode); 
+  return res.json({
+    message : err.message
+  });
+  next();
 }
 
-export default ErrorHandler;
+export default errorHandler;

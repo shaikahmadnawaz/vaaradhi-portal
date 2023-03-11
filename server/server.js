@@ -7,6 +7,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
+
 app.use("/api/admin", adminRouter);
 // app.use("/api/student", student);
 // app.use("/api/donor", donor);
