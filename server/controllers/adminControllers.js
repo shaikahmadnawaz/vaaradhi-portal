@@ -234,28 +234,29 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
 });
 
 //Update Admin Password
-// exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
-//   const { oldPassword, newPassword, confirmPassword } = req.body;
-//   if (!oldPassword || !newPassword || !confirmPassword) {
-//     return next(new ErrorHandler("Please fill all the details ", 400));
-//   }
-//   const admin = await Admin.findById(req.admin.id).select("+password");
-//   const isPasswordMatched = await bcrypt.compare(oldPassword, admin.password);
-//   if (!isPasswordMatched) {
-//     return next(new ErrorHandler("Old Password is incorrect ", 400));
-//   }
-//   if (newPassword !== confirmPassword) {
-//     return next(new ErrorHandler("Passwords does not match", 400));
-//   }
-//   if (oldPassword === newPassword) {
-//     return next(
-//       new ErrorHandler("New Password must be different from Old Password", 400)
-//     );
-//   }
-//   admin.password = newPassword;
-//   await admin.save();
-//   sendToken(admin, 200, res);
-// });
+export const updatePassword = catchAsyncErrors(async (req, res, next) => {
+  const { oldPassword, newPassword, confirmPassword } = req.body;
+  if (!oldPassword || !newPassword || !confirmPassword) {
+    return next(new ErrorHandler("Please fill all the details ", 400));
+  }
+  const admin = await Admin.findById(req.body.id).select("+password");
+  const isPasswordMatched = await admin.comparePassword(oldPassword);
+  if (!isPasswordMatched) {
+    return next(new ErrorHandler("Old Password is incorrect ", 400));
+  }
+  if (newPassword !== confirmPassword) {
+    return next(new ErrorHandler("Passwords does not match", 400));
+  }
+  if (oldPassword === newPassword) {
+    return next(
+      new ErrorHandler("New Password must be different from Old Password", 400)
+    );
+  }
+  admin.password = newPassword;
+  await admin.save();
+  res.status(StatusCodes.OK).json({ admin, message: "password updated" });
+  // sendToken(admin, 200, res);
+});
 
 //Update Student Profile
 export const updateStudent = catchAsyncErrors(async (req, res, next) => {
@@ -309,7 +310,7 @@ export const updateStudent = catchAsyncErrors(async (req, res, next) => {
 //Update Admin Profile
 export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   // const admin = await Admin.findById(req.params.id);
-  const admin = await Admin.findById(req.body.id);
+  const admin = await Admin.findById(req.body.id).select("+password");
   if (!admin) {
     return next(
       new ErrorHandler(
@@ -347,7 +348,7 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
     runValidators: true,
     useFindAndModify: false,
   });
-  const token = updatedUser.createJWt();
+  const token = updatedUser.createJWT();
   res.status(StatusCodes.OK).json({ updatedUser, token });
 });
 

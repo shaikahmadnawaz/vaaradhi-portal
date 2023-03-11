@@ -17,6 +17,7 @@ import {
   removeDonor,
   removeStudent,
   removeCareTaker,
+  updatePassword,
 } from "../controllers/adminControllers.js";
 import isAuthenticated from "../middleware/auth.js";
 
@@ -37,6 +38,11 @@ router
   .get(isAuthenticated, getAllCareTakers)
   .post(isAuthenticated, addCaretaker);
 
+router
+  .route("/students/:id")
+  .put(isAuthenticated, getAllStudents)
+  .delete(isAuthenticated, addStudent);
+
 // forgot password
 router.route("/password/forgot").post(isAuthenticated, forgotPassword);
 
@@ -45,6 +51,9 @@ router.route("/password/reset/:token").put(isAuthenticated, resetPassword);
 
 // updateProfile
 router.route("/update").put(isAuthenticated, updateProfile);
+
+// update password
+router.route("/updatePassword").put(isAuthenticated, updatePassword);
 
 // update
 router.route("/student/update/:id").put(isAuthenticated, updateStudent);
