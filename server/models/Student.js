@@ -52,6 +52,10 @@ const studentSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId,
     ref: "Caretaker",
   },
+  donor: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: "Donor",
+  },
   category: {
     type: String,
     enum: ["orphan", "semi orphan", "poor student"],
