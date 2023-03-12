@@ -1,23 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Navbar from "../../components/Navbar";
 
 const Welcome = () => {
   return (
     <section className="w-full h-screen bg-slate-200">
-      <nav className="navbar w-full bg-slate-100 flex items-center justify-between px-4 py-4 z-10">
-        <div className="name">
-          <p className="text-black font-bold text-lg">
-            Welcome <span className="text-blueTheme">Admin</span>
-          </p>
-        </div>
-        <div className="profile flex items-center">
-          <img
-            src="https://picsum.photos/200"
-            alt="Profile"
-            className="w-10 h-10 rounded-full mr-2"
-          />
-        </div>
-      </nav>
+      <Navbar />
       <div className="flex">
         <div className="sidebar w-1/4 bg-gray-100 h-screen">
           <div className="p-4">
