@@ -5,37 +5,35 @@ import { Link } from "react-router-dom";
 const AllStudents = () => {
   const { students } = useSelector((store) => store.donor);
   return (
-    <section className="min-h-screen bg-gradient-to-t from-blue-400  to-red-400 flex flex-col items-center">
-      <h1 className="pt-20 font-medium text-4xl">Students</h1>
-      <div className="student-container grid grid-cols-3 justify-self-center gap-8 h-5/5 justify-center rounded-md py-20 w-4/5 m-auto ">
+    <section className="min-h-screen bg-gray-100 flex flex-col items-center">
+      <h1 className="pt-20 font-medium text-4xl text-gray-800">Students</h1>
+      <div className="grid grid-cols-3 gap-6 mt-8">
         {students.map((student) => {
           return (
             <div
               key={student.id}
-              className="flex flex-col justify-center items-center max-w-sm rounded-lg bg-white p-6 shadow-lg dark:bg-neutral-900"
+              className="flex flex-col justify-between max-w-sm rounded-lg bg-white p-6 shadow-lg hover:shadow-xl transition duration-300 ease-in-out"
             >
-              <div className="w-32 h-32">
+              <div className="w-32 h-32 mx-auto">
                 <img
-                  src={student.image}
-                  alt="card img"
-                  className="w-full mt-0 mb-7 rounded-full"
+                  src={student.image || "https://via.placeholder.com/150"}
+                  alt="student img"
+                  className="w-full h-full object-cover rounded-full"
                 />
               </div>
-              <p className="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
-                {student.name}
-              </p>
-              <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
-                {student.gender}
-              </p>
-              <p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
-                {student.mobile}
-              </p>
-              <Link
-                to={`/donor/students/${student.id}`}
-                className="inline-block rounded px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal bg-blue-500 hover:bg-blue-600 text-white p-2"
-              >
-                More details
-              </Link>
+              <div>
+                <p className="mb-2 text-lg font-medium leading-tight text-gray-800">
+                  {student.name}
+                </p>
+                <p className="mb-2 text-sm text-gray-600">{student.gender}</p>
+                <p className="mb-4 text-sm text-gray-600">{student.mobile}</p>
+                <Link
+                  to={`/donor/students/${student.id}`}
+                  className="inline-block rounded-full px-4 py-2 text-sm font-medium uppercase leading-normal bg-blue-500 hover:bg-blue-600 text-white transition duration-300 ease-in-out"
+                >
+                  More details
+                </Link>
+              </div>
             </div>
           );
         })}
