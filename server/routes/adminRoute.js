@@ -1,175 +1,40 @@
 import express from "express";
 const router = express.Router();
 
-import { addDonor,addCaretaker, updateDonor, updateCareTaker } from "../controllers/adminControllers.js";
+import { addDonor,addCaretaker, updateDonor, updateCareTaker, addStudent, Login, forgotPassword, resetPassword, updatePassword, updateStudent, removeDonor, removeCareTaker, removeStudent, getAllDonors, getAllCareTakers, getAllStudents, getMyDetails, updateProfile } from "../controllers/adminControllers.js";
+import { isAuthenticated } from '../middleware/auth.js'
+// import { addAdmin } from '../controllers/adminControllers/js'
 
-router.route("/donor/new").post(addDonor);
-router.route("/donor/update/:id").put(updateDonor);
 
+//Actions for Donor
+router.route("/donor/new").post( isAuthenticated, addDonor);
+router.route("/donor/update/:id").put(isAuthenticated, updateDonor);
+router.route("/donor/delete/:id").delete(isAuthenticated, removeDonor);
+router.route("/donors/all").get(isAuthenticated, getAllDonors);
 
-router.route('/caretaker/new').post(addCaretaker)
-router.route('/caretaker/update/:id').put(updateCareTaker);
 
+//Actions for CareTaker
+router.route("/caretaker/new").post(isAuthenticated, addCaretaker);
+router.route("/caretaker/update/:id").put(isAuthenticated, updateCareTaker);
+router.route("/caretaker/delete/:id").delete(isAuthenticated, removeCareTaker);
+router.route("/caretakers/all").get(isAuthenticated, getAllCareTakers);
 
 
+//Actionss for Student
+router.route("/student/new").post(isAuthenticated, addStudent);
+router.route("/student/update/:id").put(isAuthenticated, updateStudent);
+router.route("/student/delete/:id").delete(isAuthenticated, removeStudent);
+router.route("/students/all").get(isAuthenticated, getAllStudents);
 
 
+//Actions for Admin
+router.route("/login").post(Login);
+router.route("/password/forgot").post(isAuthenticated, forgotPassword);
+router.route("/password/reset/:token").put(isAuthenticated, resetPassword); 
+router.route("/password/update").put(isAuthenticated, updatePassword);
+router.route('/me/update').put(isAuthenticated, updateProfile);
+router.route('/me').get(isAuthenticated,getMyDetails);
+// router.route("/new").post(isAuthenticated, addAdmin)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import {
-//   addDonor,
-//   addStudent,
-//   addCaretaker,
-//   login,
-//   forgotPassword,
-//   resetPassword,
-//   updateStudent,
-//   updateProfile,
-//   updateDonor,
-//   updateCareTaker,
-//   getAllDonors,
-//   getAllStudents,
-//   getAllCareTakers,
-//   removeDonor,
-//   removeStudent,
-//   removeCareTaker,
-//   updatePassword,
-// } from "../controllers/adminControllers.js";
-// import isAuthenticated from "../middleware/auth.js";
-
-// // login
-// router.route("/login").post(login);
-
-// // create, read
-// router
-//   .route("/students")
-//   .get(isAuthenticated, getAllStudents)
-//   .post(isAuthenticated, addStudent);
-// router
-//   .route("/donors")
-//   .get(isAuthenticated, getAllDonors)
-//   .post(isAuthenticated, addDonor);
-// router
-//   .route("/caretakers")
-//   .get(isAuthenticated, getAllCareTakers)
-//   .post(isAuthenticated, addCaretaker);
-
-// router
-//   .route("/students/:id")
-//   .put(isAuthenticated, getAllStudents)
-//   .delete(isAuthenticated, addStudent);
-
-// // forgot password
-// router.route("/password/forgot").post(isAuthenticated, forgotPassword);
-
-// // reset password
-// router.route("/password/reset/:token").put(isAuthenticated, resetPassword);
-
-// // updateProfile
-// router.route("/update").put(isAuthenticated, updateProfile);
-
-// // update password
-// router.route("/updatePassword").put(isAuthenticated, updatePassword);
-
-// // update
-// router.route("/student/update/:id").put(isAuthenticated, updateStudent);
-// router.route("/donor/update/:id").put(isAuthenticated, updateDonor);
-// router.route("/caretaker/update/:id").put(isAuthenticated, updateCareTaker);
-
-// router.route("/caretakers/all").get(
-//   isAuthenticated,
-//   // authorizeRoles("admin"),
-//   getAllCareTakers
-// );
-
-// router.route("/donor/:id").get(
-//   isAuthenticated,
-//   // authorizeRoles("admin"),
-//   //getDonorDetails
-// );
-
-// router.route("/student/:id").get(
-//   isAuthenticated,
-//   // authorizeRoles("admin"),
-//   //getStudentDetails
-// );
-
-// router.route("/caretaker/:id").get(
-//   isAuthenticated,
-//   // authorizeRoles("admin"),
-//   //getCareTakerDetails
-// );
-
-// router.route("/student/update/:id").put(
-//   isAuthenticated,
-//   // authorizeRoles("admin"),
-//   updateStudentProfile
-// );
-
-// router.route("/donor/update/:id").put(
-//   isAuthenticated,
-//   // authorizeRoles("admin"),
-//   updateDonorProfile
-// );
-
-// router.route("/caretaker/update/:id").put(
-//   isAuthenticated,
-//   // authorizeRoles("admin"),
-//   updateCareTakerProfile
-// );
-
-// router.route("/donor/delete/:id").delete(
-//   isAuthenticated,
-//   // authorizeRoles("admin"),
-//   removeDonor
-// );
-
-// router.route("/student/delete/:id").delete(
-//   isAuthenticated,
-//   // authorizeRoles("admin"),
-//   removeStudent
-// );
-
-// router.route("/caretaker/delete/:id").delete(
-//   isAuthenticated,
-//   // authorizeRoles("admin"),
-//   removeCareTaker
-// );
 
 export default router;

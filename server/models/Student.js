@@ -25,7 +25,7 @@ const studentSchema = new mongoose.Schema({
     required: "Aadhar Number can't be empty",
     minlength: 12,
     maxlength: 12,
-    select: false,
+    unique :true
   },
   dateOfBirth: {
     type: Date,

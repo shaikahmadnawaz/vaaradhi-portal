@@ -17,6 +17,7 @@ const adminSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    unique :true,
     validate: {
       validator: validator.isEmail,
       message: "not a valid email",
@@ -26,7 +27,6 @@ const adminSchema = new mongoose.Schema({
     type: String,
     required: "Date of birth can't be empty",
     minlength: 5,
-    select: false,
   },
   mobile: {
     type: String,
@@ -53,19 +53,12 @@ adminSchema.methods.createJWT = function () {
 };
 
 adminSchema.methods.comparePassword = async function (candidatePassword) {
-  const isMatch = await bcrypt.compare(candidatePassword, this.password);
-  return isMatch;
+  return await bcrypt.compare(candidatePassword, this.password);
 };
 
-//Generating Password Reset Token
 adminSchema.methods.getResetPasswordToken = function () {
-  //generating token
   const resetToken = crypto.randomBytes(20).toString("hex");
-  //hashing and adding to userSchema
-  this.resetPasswordToken = crypto
-    .createHash("sha256")
-    .update(resetToken)
-    .digest("hex");
+  this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
   this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
   return resetToken;
 };
