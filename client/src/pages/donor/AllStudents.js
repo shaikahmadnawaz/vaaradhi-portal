@@ -5,8 +5,10 @@ import { Link } from "react-router-dom";
 const AllStudents = () => {
   const { students } = useSelector((store) => store.donor);
   return (
-    <section className="min-h-screen bg-gray-100 flex flex-col items-center">
-      <h1 className="pt-20 font-medium text-4xl text-gray-800">Students</h1>
+    <section className="min-h-screen bg-gray-300 flex flex-col items-center">
+      <h2 className="pt-20 mt-7 font-medium text-3xl text-gray-800">
+        Students Adopted
+      </h2>
       <div className="grid grid-cols-3 gap-6 mt-8">
         {students.map((student) => {
           return (
