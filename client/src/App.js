@@ -1,8 +1,10 @@
 import React from "react";
 import Login from "./components/Login";
 import { Welcome as AdminWelcome, CreateStudent } from "./pages/admin";
-import { Welcome as DonorWelcome, AllStudents, Student } from "./pages/donor";
+
+import { AllStudents, Welcome as DonorWelcome, Student } from "./pages/donor";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Welcome } from "./pages/caretaker";
 
 function App() {
   return (
@@ -18,6 +20,9 @@ function App() {
             <Route index element={<DonorWelcome />} />
             <Route path="students" element={<AllStudents />} />
             <Route path="students/:id" element={<Student />} />
+          </Route>
+          <Route path="/caretaker/">
+            <Route index element={<Welcome />} />
           </Route>
         </Routes>
       </BrowserRouter>

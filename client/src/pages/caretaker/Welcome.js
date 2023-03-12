@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../../components/Navbar";
-import AllStudents from "../../components/AllStudents";
+import { AllStudents } from "../donor";
 
 const Welcome = () => {
   return (
