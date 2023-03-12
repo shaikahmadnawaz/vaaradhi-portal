@@ -12,6 +12,20 @@ const studentSchema = new mongoose.Schema({
       validator: validator.isURL,
       message: "Not a valid URL",
     },
+    required: "image can't be empty",
+  },
+  isAcitve: {
+    type: String,
+    enum: ["yes", "no"],
+    default: "yes",
+    required: "active status can't be empty",
+  },
+  aadhar: {
+    type: Number,
+    required: "Aadhar Number can't be empty",
+    minlength: 12,
+    maxlength: 12,
+    unique :true
   },
   dateOfBirth: {
     type: Date,
