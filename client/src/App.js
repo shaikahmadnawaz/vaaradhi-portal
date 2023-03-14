@@ -1,18 +1,20 @@
 import React from "react";
 import Login from "./components/Login";
 import { Welcome as AdminWelcome, CreateStudent } from "./pages/admin";
-
 import { AllStudents, Welcome as DonorWelcome, Student } from "./pages/donor";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Welcome } from "./pages/caretaker";
+import Landing from "./pages/Landing";
+import ProtectedLayout from "./pages/admin/ProtectedLayout";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/admin/">
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="admin/" element={<ProtectedLayout />}>
             <Route index element={<AdminWelcome />} />
             <Route path="createstudent" element={<CreateStudent />} />
           </Route>

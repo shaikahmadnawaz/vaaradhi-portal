@@ -1,7 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import LoginImg from "../assets/login.svg";
+import { login } from "../features/admin/adminSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((store) => store.admin);
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      alert("Fill all the details");
+      return;
+    }
+    dispatch(login({ email, password }));
+  };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/admin");
+    }
+  }, [user, navigate]);
+
   return (
     <div className="container w-screen h-screen flex items-center justify-center gap-[7rem] py-[2rem]">
       <div className="img w-1/2 flex justify-end items-center">
@@ -24,6 +49,8 @@ const Login = () => {
                 <input
                   type="email"
                   id="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
                   className="input border-b-2 border-gray-400 focus:outline-none w-full py-1 text-base ml-2"
                   placeholder="Enter your email"
                 />
@@ -37,6 +64,8 @@ const Login = () => {
                 <input
                   type="password"
                   id="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
                   className="input border-b-2 border-gray-400 focus:outline-none w-full py-1 text-base ml-2"
                   placeholder="Enter your password"
                 />
@@ -71,6 +100,7 @@ const Login = () => {
           </div>
           <input
             type="submit"
+            onClick={(e) => onSubmit(e)}
             className="btn block w-[400px] h-12 rounded-lg uppercase my-4 cursor-pointer bg-blueTheme text-white hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
             value="Login"
           />

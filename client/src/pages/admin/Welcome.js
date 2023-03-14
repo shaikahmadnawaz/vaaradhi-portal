@@ -1,8 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
+import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Welcome = () => {
+  const { user } = useSelector((store) => store.admin);
+  if (!user) {
+    return <Navigate to="/" />;
+  }
   return (
     <section className="w-full h-screen bg-slate-200">
       <Navbar />
