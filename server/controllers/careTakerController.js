@@ -3,10 +3,36 @@
     geteachstudent
     addprogress
     editprogress - (put,delete)
+
 */
 import { Caretaker, Student } from "../models/index.js";
 import expressAsyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
+import {Activity} from "../models/ActivitySchema.js";
+
+
+export const Login = expressAsyncHandler(async (req, res, next) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(StatusCodes.BAD_REQUEST).json({Error: "Please fill all details"});
+    }
+    const caretaker = await Caretaker.findOne({ email });
+    if (!caretaker) {
+      return res.status(StatusCodes.NOT_FOUND).json({ Error:"caretaker not found !"});
+    }
+  
+    const isPasswordMatched = await caretaker.comparePassword(password);
+    if (!isPasswordMatched) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({ message:"Invalid Credentials !"});
+    }
+    const token = caretaker.createJWT();
+    const caretakerData = await Caretaker.findOne({_id:caretaker._id}).select('-password');
+    return res.status(StatusCodes.OK).json({ caretakerData, token ,message:"Login Success !"});
+  });
+
+  
+
+
 export const getMyStudents = expressAsyncHandler(async (req, res) => {
     const id = req.userId;
     console.log(id);
