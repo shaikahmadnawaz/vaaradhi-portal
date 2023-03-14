@@ -1,11 +1,12 @@
 import React from "react";
 import Login from "./components/Login";
 import { Welcome as AdminWelcome, CreateStudent } from "./pages/admin";
-import { AllStudents, Welcome as DonorWelcome, Student } from "./pages/donor";
+import { AllStudents, Welcome as DonorWelcome } from "./pages/donor";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Welcome } from "./pages/caretaker";
 import Landing from "./pages/Landing";
 import ProtectedLayout from "./pages/admin/ProtectedLayout";
+import Student from "./pages/admin/Student";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="admin/" element={<ProtectedLayout />}>
             <Route index element={<AdminWelcome />} />
             <Route path="createstudent" element={<CreateStudent />} />
+            <Route path="student" element={<Student />} />
           </Route>
           <Route path="/donor/">
             <Route index element={<DonorWelcome />} />
