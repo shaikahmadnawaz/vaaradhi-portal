@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 const donorSchema = new mongoose.Schema({
   name: {

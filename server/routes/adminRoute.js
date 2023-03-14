@@ -3,7 +3,7 @@ const router = express.Router();
 
 import { addDonor,addCaretaker, updateDonor, updateCareTaker, addStudent, Login, forgotPassword, resetPassword, updatePassword, updateStudent, removeDonor, removeCareTaker, removeStudent, getAllDonors, getAllCareTakers, getAllStudents, getMyDetails, updateProfile } from "../controllers/adminControllers.js";
 import { isAuthenticated } from '../middleware/auth.js'
-// import { addAdmin } from '../controllers/adminControllers/js'
+// import { addAdmin } from '../controllers/adminControllers.js'
 
 
 //Actions for Donor

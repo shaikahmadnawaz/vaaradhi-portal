@@ -95,7 +95,7 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
   const resetToken = admin.getResetPasswordToken();
   await admin.save({ validateBeforeSave: false });
   const resetPasswordUrl = `${req.protocol}://${req.get("host")}/api/password/reset/${resetToken}`;
-  const message = `Click on this link to reset your password \n\n ${resetPasswordUrl} \n\n If you have not requested this email then please ignore it`;
+  const message = `\n Click on this link to reset your password \n\n ${resetPasswordUrl} \n\n If you have not requested this email then please ignore it`;
   try {
     await sendEmail({
       email: admin.email,
@@ -129,7 +129,7 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
   admin.resetPasswordToken = undefined;
   admin.resetPasswordExpire = undefined;
   await admin.save();
-  return res.status(StatusCodes.OK).json();
+  return res.status(StatusCodes.OK).json({  message: "Password updated" });
 });
 
 //Update Admin Password
@@ -151,7 +151,7 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
   }
   admin.password = newPassword;
   await admin.save();
-  return res.status(StatusCodes.OK).json({ admin, message: "password updated" });
+  return res.status(StatusCodes.OK).json({ message: "password updated" , admin });
 });
 
 

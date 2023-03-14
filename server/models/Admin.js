@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 const adminSchema = new mongoose.Schema({
   name: {
