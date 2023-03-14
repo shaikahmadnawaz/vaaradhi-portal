@@ -77,6 +77,7 @@ export const Login = asyncHandler(async (req, res, next) => {
   if (!admin) {
     return res.status(StatusCodes.NOT_FOUND).json({ Error:"User not found !"});
   }
+
   const isPasswordMatched = await admin.comparePassword(password);
   if (!isPasswordMatched) {
     return res.status(StatusCodes.UNAUTHORIZED).json({ message:"Invalid Credentials !"});
@@ -259,17 +260,32 @@ export const removeDonor = asyncHandler(async (req, res, next) => {
 
 
 //Remove Student
+/*
+  When a student is removed the array containing the student id of the caretaker should also be updated
+
+*/
 export const removeStudent = asyncHandler(async (req, res, next) => {
   const student = await Student.findById(req.params.id);
   if (!student) {
     return res.status(StatusCodes.NOT_FOUND).json({ Error:"User not found!"});
   }
+  const caretaker = await Caretaker.findOne({_id:student.careTaker});
+  const studentsOfCaretaker = caretaker['students'];
+  const newStudents = studentsOfCaretaker.filter((student)=>{
+    return student !== req.params.id;
+  })
+  caretaker.students = newStudents;
+  caretaker.save();
   await student.deleteOne();
-  res.status(StatusCodes.OK).json({message: "Student Removed ",});
+  res.status(StatusCodes.OK).json({message: "Student Removed and caretaker profile updated"});
 });
 
 
 //Remove CareTaker
+/*
+  When a caretaker is removed all the students of the caretaker should also be changed.
+  careTaker id of the student is set to null
+*/
 export const removeCareTaker = asyncHandler(async (req, res, next) => {
   const caretaker = await Caretaker.findById(req.params.id);
   if (!caretaker) {
@@ -277,5 +293,46 @@ export const removeCareTaker = asyncHandler(async (req, res, next) => {
   }
   console.log(caretaker)
   await caretaker.deleteOne();
+  const students = await Student.find({careTaker : caretaker._id});
+  students.map(async(student) =>{
+    student.careTaker = null;
+    await student.save();
+  })
   res.status(StatusCodes.OK).json({message: "Caretaker Removed ",});
 });
+
+
+//add students to caretaker
+
+const addStudentToCaretaker = asyncHandler(async(req,res) =>{
+  const caretakerId = req.body.caretakerId;
+  const caretaker = await careTaker.findOne({_id:caretakerId});
+  if(!caretaker)
+  {
+    return res.status(400).json({message : "Invalid caretaker data !"});
+  }
+  else{
+    const studentId = req.body.studentId;
+    const isValidStudent = await Student.findOne({_id:studentId});
+
+    if(!isValidStudent)
+    {
+      return res.status(400).json({message:"Invalid student data !"});
+    }
+    else{
+      try{
+        const newStudents = caretaker['students'];
+        newStudents.push(studentId);
+        caretaker.students = newStudents;
+        await caretaker.save();
+      }
+      catch(err)
+      {
+        return res.status(400).json({message:"something went wrong"});
+      }
+    }
+  }
+  
+
+
+})

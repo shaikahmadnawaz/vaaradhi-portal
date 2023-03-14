@@ -28,7 +28,6 @@ const donorSchema = new mongoose.Schema({
       message: "not a valid email",
     },
     required: "email can't be empty",
-    unique: true,
   },
   password: {
     type: String,
