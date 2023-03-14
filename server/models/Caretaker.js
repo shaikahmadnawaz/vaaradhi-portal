@@ -33,7 +33,6 @@ const careTakerSchema = new mongoose.Schema({
     type: String,
     required: "Password can't be empty",
     minlength: 5,
-    select: false,
   },
   mobile: {
     type: String,

@@ -14,7 +14,7 @@ const studentSchema = new mongoose.Schema({
     },
     required: "image can't be empty",
   },
-  isAcitve: {
+  isActive: {
     type: String,
     enum: ["yes", "no"],
     default: "yes",
@@ -93,19 +93,9 @@ const studentSchema = new mongoose.Schema({
   ],
   activities: [
     {
-      title: String,
-      description: String,
-      category: {
-        type: String,
-        enum: ["workshop", "competition", "exam report", "other"],
-      },
-      photos: [
-        {
-          type: String,
-          validate: { validator: validator.isURL, message: "Not a valid URL" },
-        },
-      ],
-    },
+      type:mongoose.SchemaTypes.ObjectId,
+      ref:'Activity'
+    }
   ],
 });
 
