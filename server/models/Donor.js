@@ -33,7 +33,6 @@ const donorSchema = new mongoose.Schema({
     type: String,
     required: "password can't be empty",
     minlength: 5,
-    select: false,
   },
   mobile: {
     type: String,
@@ -59,7 +58,7 @@ donorSchema.pre("save", async function () {
 });
 
 donorSchema.methods.createJWT = function () {
-  return jwt.sign({ usedId: this._id }, process.env.JWT_SECRET, {
+  return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_LIFETIME,
   });
 };

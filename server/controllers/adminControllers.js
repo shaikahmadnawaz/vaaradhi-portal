@@ -303,7 +303,6 @@ export const removeCareTaker = asyncHandler(async (req, res, next) => {
 
 
 //add students to caretaker
-
 const addStudentToCaretaker = asyncHandler(async(req,res) =>{
   const caretakerId = req.body.caretakerId;
   const caretaker = await careTaker.findOne({_id:caretakerId});

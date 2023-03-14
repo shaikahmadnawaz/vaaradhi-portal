@@ -3,11 +3,11 @@
     geteachstudent
     addprogress
     editprogress - (put,delete)
-
 */
 import { Caretaker, Student } from "../models/index.js";
 import expressAsyncHandler from "express-async-handler";
 import { StatusCodes } from "http-status-codes";
+
 export const getMyStudents = expressAsyncHandler(async (req, res) => {
   const id = req.body.id;
   if (!id) {
