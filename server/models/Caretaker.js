@@ -33,7 +33,6 @@ const careTakerSchema = new mongoose.Schema({
     type: String,
     required: "Password can't be empty",
     minlength: 5,
-    select: false,
   },
   mobile: {
     type: String,
@@ -55,7 +54,7 @@ careTakerSchema.pre("save", async function () {
 });
 
 careTakerSchema.methods.createJWT = function () {
-  return jwt.sign({ usedId: this._id }, process.env.JWT_SECRET, {
+  return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_LIFETIME,
   });
 };
