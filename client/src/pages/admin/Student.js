@@ -1,12 +1,12 @@
 import React from "react";
 import Navbar from "../../components/Navbar";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import donations from "../../assets/donations";
 
 const Student = () => {
   return (
     <div className="container">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="grid grid-cols-2 ">
         <div className="p1 h-screen">
           <div className="bg-white mt-32 shadow-lg rounded-lg overflow-hidden w-80 mx-auto">
