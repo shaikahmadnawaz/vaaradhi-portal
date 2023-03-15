@@ -12,7 +12,7 @@ const Welcome = () => {
   return (
     <section className="w-full h-screen bg-slate-200">
       <Navbar />
-      <div className="flex">
+      <div className="flex mt-[4rem] h-full">
         <div className="sidebar w-1/4 bg-gray-100 h-screen">
           <div className="p-4">
             <h2 className="text-lg font-bold mb-4">Dashboard</h2>
@@ -60,7 +60,7 @@ const Welcome = () => {
               <p className="text-white">7</p>
             </div>
           </div>
-          <div className="p-4 h-screen">
+          <div className="p-4 h-full">
             <h2 className="text-lg font-bold mb-4">Announcements</h2>
             <ul className="text-gray-800">
               <li className="mb-2">

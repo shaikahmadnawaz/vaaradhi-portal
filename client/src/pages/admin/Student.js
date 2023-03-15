@@ -6,20 +6,7 @@ import donations from "../../assets/donations";
 const Student = () => {
   return (
     <div className="container">
-      <nav className="navbar w-full bg-slate-100 flex items-center justify-between px-4 py-4  fixed top-0 z-50">
-        <div className="name">
-          <p className="text-black font-bold text-lg">
-            Welcome <span className="text-blueTheme">Donor</span>
-          </p>
-        </div>
-        <div className="profile flex items-center">
-          <img
-            src="https://picsum.photos/200"
-            alt="Profile"
-            className="w-10 h-10 rounded-full mr-2"
-          />
-        </div>
-      </nav>
+      <Navbar />
       <div className="grid grid-cols-2 ">
         <div className="p1 h-screen">
           <div className="bg-white mt-32 shadow-lg rounded-lg overflow-hidden w-80 mx-auto">
