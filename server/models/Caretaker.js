@@ -4,47 +4,63 @@ import validator from "validator";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
-const careTakerSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: "Name can't be empty",
-  },
-  image: {
-    type: String,
-    validate: {
-      validator: validator.isURL,
-      message: "Not a valid URL",
+const careTakerSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: "Name can't be empty",
     },
-  },
-  dateOfBirth: {
-    type: Date,
-    required: "Date of birth can't be empty",
-  },
-  email: {
-    type: String,
-    validate: {
-      validator: validator.isEmail,
-      message: "not a valid email",
+    image: {
+      type: String,
+      validate: {
+        validator: validator.isURL,
+        message: "Not a valid URL",
+      },
+      required: [true, "Image can't be empty"],
     },
-    required: "email can't be empty", 
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: "Password can't be empty",
-    minlength: 5,
-  },
-  mobile: {
-    type: String,
-    validate: {
-      validator: validator.isMobilePhone,
-      message: "not a valid mobile number",
+    dateOfBirth: {
+      type: Date,
+      required: "Date of birth can't be empty",
     },
-    required: "mobile number can't be empty",
+    email: {
+      type: String,
+      validate: {
+        validator: validator.isEmail,
+        message: "not a valid email",
+      },
+      required: [true, "email can't be empty"],
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Password can't be empty"],
+      minlength: 5,
+    },
+    mobile: {
+      type: String,
+      validate: {
+        validator: validator.isMobilePhone,
+        message: "not a valid mobile number",
+      },
+      required: [true, "mobile number can't be empty"],
+    },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
   },
-  students: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Student" }],
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
+  {
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      virtuals: true,
+    },
+  }
+);
+
+careTakerSchema.virtual("students", {
+  ref: "Student",
+  localField: "_id",
+  foreignField: "careTaker",
 });
 
 careTakerSchema.pre("save", async function () {
@@ -65,7 +81,10 @@ careTakerSchema.methods.comparePassword = async function (candidatePassword) {
 
 careTakerSchema.methods.getResetPasswordToken = function () {
   const resetToken = crypto.randomBytes(20).toString("hex");
-  this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
   this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
   return resetToken;
 };

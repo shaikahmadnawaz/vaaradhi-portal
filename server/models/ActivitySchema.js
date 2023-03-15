@@ -5,6 +5,11 @@ const ActivitySchema = new mongoose.Schema({
     type: String,
     required: [true, "provide title"],
   },
+  student: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: "Student",
+    required: [true, "Provide student details"],
+  },
   description: {
     type: String,
     required: [true, "provide description"],
@@ -12,7 +17,7 @@ const ActivitySchema = new mongoose.Schema({
   category: {
     type: String,
     enum: ["workshop", "competition", "exam report", "other"],
-    required: [true, "provide category"]
+    required: [true, "provide category"],
   },
   photos: [
     {

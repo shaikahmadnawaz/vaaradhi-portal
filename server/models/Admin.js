@@ -7,7 +7,7 @@ import crypto from "crypto";
 const adminSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: "Name can't be empty",
+    required: [true, "Name can't be empty"],
   },
   image: {
     type: String,
@@ -15,18 +15,20 @@ const adminSchema = new mongoose.Schema({
       validator: validator.isURL,
       message: "Not a valid URL",
     },
+    required: [true, "Name can't be empty"],
   },
   email: {
     type: String,
-    unique :true,
+    unique: true,
     validate: {
       validator: validator.isEmail,
       message: "not a valid email",
     },
+    required: [true, "Email can't be empty"],
   },
   password: {
     type: String,
-    required: "Date of birth can't be empty",
+    required: [true, "Password can't be empty"],
     minlength: 5,
   },
   mobile: {
@@ -35,6 +37,7 @@ const adminSchema = new mongoose.Schema({
       validator: validator.isMobilePhone,
       message: "not a valid mobile number",
     },
+    required: [true, "Moblie number can't be empty"],
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
@@ -59,7 +62,10 @@ adminSchema.methods.comparePassword = async function (candidatePassword) {
 
 adminSchema.methods.getResetPasswordToken = function () {
   const resetToken = crypto.randomBytes(20).toString("hex");
-  this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
   this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
   return resetToken;
 };

@@ -6,8 +6,6 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-
-
 const port = process.env.PORT || 5000;
 const start = async () => {
   try {
@@ -21,4 +19,3 @@ const start = async () => {
 };
 
 start();
-
