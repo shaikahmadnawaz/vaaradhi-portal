@@ -33,7 +33,7 @@ const adminSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: validator.isMobilePhone,
-      message: "not a valid email",
+      message: "not a valid mobile number",
     },
   },
   resetPasswordToken: String,

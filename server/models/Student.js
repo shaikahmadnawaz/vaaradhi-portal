@@ -15,17 +15,15 @@ const studentSchema = new mongoose.Schema({
     required: "image can't be empty",
   },
   isActive: {
-    type: String,
-    enum: ["yes", "no"],
-    default: "yes",
-    required: "active status can't be empty",
+    type: Boolean,
+    default: true,
   },
   aadhar: {
     type: Number,
     required: "Aadhar Number can't be empty",
     minlength: 12,
     maxlength: 12,
-    unique :true
+    unique: true,
   },
   dateOfBirth: {
     type: Date,
@@ -52,10 +50,12 @@ const studentSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId,
     ref: "Caretaker",
   },
-  donor: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: "Donor",
-  },
+  donor: [
+    {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Donor",
+    },
+  ],
   category: {
     type: String,
     enum: ["orphan", "semi orphan", "poor student"],
@@ -71,9 +71,9 @@ const studentSchema = new mongoose.Schema({
       enum: ["school", "intermediate", "ug"],
       required: "level can't be empty",
     },
-    year: {
+    class: {
       type: Number,
-      required: "class/year can't be empty",
+      required: "class can't be empty",
     },
   },
   previousCaretakers: [
@@ -82,20 +82,15 @@ const studentSchema = new mongoose.Schema({
   previousDonors: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Donor" }],
   documents: [
     {
-      name: String,
-      url: [
-        {
-          type: String,
-          validate: { validator: validator.isURL, message: "Not a valid URL" },
-        },
-      ],
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Document",
     },
   ],
   activities: [
     {
-      type:mongoose.SchemaTypes.ObjectId,
-      ref:'Activity'
-    }
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Activity",
+    },
   ],
 });
 

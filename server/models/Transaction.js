@@ -18,6 +18,12 @@ const transactionSchema = new mongoose.Schema({
   amount: {
     type: Number,
     required: "amount can't be empty",
+    validate: {
+      validator: function (v) {
+        return v > 0;
+      },
+      message: "Amount must be greater than zero",
+    },
   },
 });
 

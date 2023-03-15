@@ -26,7 +26,7 @@ const careTakerSchema = new mongoose.Schema({
       validator: validator.isEmail,
       message: "not a valid email",
     },
-    required: "email can't be empty",
+    required: "email can't be empty", 
     unique: true,
   },
   password: {

@@ -38,7 +38,7 @@ const donorSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: validator.isMobilePhone,
-      message: "not a valid email",
+      message: "Not a valid mobile no",
     },
     required: "mobile number can't be empty",
   },
