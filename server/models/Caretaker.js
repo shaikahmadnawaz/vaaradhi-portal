@@ -31,6 +31,10 @@ const careTakerSchema = new mongoose.Schema(
       required: [true, "email can't be empty"],
       unique: true,
     },
+    isActive : {
+      type : Boolean,
+      default : true,
+    },
     password: {
       type: String,
       required: [true, "Password can't be empty"],

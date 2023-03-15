@@ -35,6 +35,10 @@ const donorSchema = new mongoose.Schema(
       required: "password can't be empty",
       minlength: 5,
     },
+    isActive : {
+      type : Boolean,
+      default : true,
+    },
     mobile: {
       type: String,
       validate: {
@@ -46,10 +50,10 @@ const donorSchema = new mongoose.Schema(
     occupation: {
       type: String,
     },
-    transactions: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Transaction" }],
     resetPasswordToken: String,
     resetPasswordExpire: Date,
   },
+
   {
     toJSON: {
       virtuals: true,
@@ -59,7 +63,11 @@ const donorSchema = new mongoose.Schema(
     },
   }
 );
-
+donorSchema.virtual('transactions',{
+  ref:"Transaction",
+  localField : "_id",
+  foreignField : "donor"
+})
 donorSchema.virtual("students", {
   ref: "Student",
   localField: "_id",
